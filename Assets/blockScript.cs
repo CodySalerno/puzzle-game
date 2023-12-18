@@ -16,7 +16,6 @@ public class blockScript : MonoBehaviour
         spriteRenderer.sprite = spriteList[Random.Range(0, spriteList.Count)];
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         update_counter++;
