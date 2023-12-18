@@ -6,8 +6,10 @@ public class blockScript : MonoBehaviour
 {
     public Rigidbody2D body;
     public SpriteRenderer spriteRenderer;
+    private int int_y_floor;
     [SerializeField] List<Sprite> spriteList;
     // Start is called before the first frame update
+    private int update_counter = 0;
     void Start()
     {
 
@@ -15,8 +17,14 @@ public class blockScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        update_counter++;
+        if (update_counter % 100 == 0) 
+        {
+            int_y_floor = (int)transform.position.y;
+            transform.position += new Vector3(0f, 0.2f, 0);
+        }
         
     }
 }

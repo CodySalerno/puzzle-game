@@ -7,13 +7,13 @@ public class Grid : MonoBehaviour
     [SerializeField] private int width;
     [SerializeField] private int height;
     [SerializeField] private float cellSize;
-    private int[,] gridArray;
+    private GameObject[,] gridArray;
     public GameObject blockspawner;
 
     // Awake is called when the script instance is being loaded
     void Awake()
     {
-        gridArray = new int[width, height];
+        gridArray = new GameObject[width, height];
 
         for (int x = 0; x < gridArray.GetLength(0); x++)
         {
@@ -34,7 +34,7 @@ public class Grid : MonoBehaviour
         SetCellValue(-1, height, 50);
         SetCellValue(0, -1, 60);*/
 
-        populateGrid();
+        CreateRow();
     }
 
     private Vector2 GetWorldPosition(int x, int y)
@@ -46,23 +46,26 @@ public class Grid : MonoBehaviour
         return new Vector2(x, y) * cellSize + new Vector2(1, 1) * cellSize/2;
     }
 
-    private void SetCellValue(int x, int y, int value)
+    private void SetCellValue(int x, int y, GameObject block)
     {
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
-            gridArray[x, y] = value;
+            gridArray[x, y] = block;
         }
     }
 
-    public void populateGrid()
+    public void CreateRow()
     {
         for (int x = 0; x < gridArray.GetLength(0); x++)
         {
-            for (int y = 0; y < gridArray.GetLength(1); y++)
+            /*for (int y = 0; y < gridArray.GetLength(1); y++)
             {
                 GameObject block = Instantiate(blockspawner, GetCenterPosition(x, y), Quaternion.identity);
                 // Additional setup for block if needed
-            }
+            }*/
+            int y = 0;
+            GameObject block = Instantiate(blockspawner, GetCenterPosition(x, y), Quaternion.identity);
+            SetCellValue(x, y, block);
         }
     }
 }
