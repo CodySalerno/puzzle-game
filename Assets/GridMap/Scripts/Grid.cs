@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.GameCenter;
+using UnityEngine.UIElements;
 
 public class Grid : MonoBehaviour
 {
@@ -10,8 +12,9 @@ public class Grid : MonoBehaviour
     [SerializeField] private float cellSize;
     public GameObject[,] gridArray;
     public GameObject blockspawner;
+    public GameObject cursorSpawner;
     private int update_counter = 0;
-
+    double tolerance = 1e-5; // You can adjust the tolerance as needed
     // Awake is called when the script instance is being loaded
     void Awake()
     {
@@ -40,8 +43,21 @@ public class Grid : MonoBehaviour
         {
             CreateRowStart(i);
         }
+        Vector2 cursorVector2 = GetCenterPosition(3, 4);
+        Vector3 cursorVector3 = new Vector3(cursorVector2.x-.5f, cursorVector2.y, -1);
+        cursorSpawner.transform.position = cursorVector3;
     }
 
+    private void Start()
+    {
+
+        BreakBlocks();
+    }
+
+    private void PrintArray()
+    {
+
+    }
     private Vector2 GetWorldPosition(int x, int y)
     {
         return new Vector2(x, y) * cellSize;
@@ -61,6 +77,7 @@ public class Grid : MonoBehaviour
 
     public void CreateRowStart(int y)
     {
+        
         for (int x = 0; x < gridArray.GetLength(0); x++)
         {
             /*for (int y = 0; y < gridArray.GetLength(1); y++)
@@ -71,6 +88,7 @@ public class Grid : MonoBehaviour
             GameObject block = Instantiate(blockspawner, GetCenterPosition(x, y), Quaternion.identity);
             SetCellValue(x, y, block);
         }
+
     }
     public void CreateRow()
     {
@@ -89,6 +107,7 @@ public class Grid : MonoBehaviour
 
     public void IncreaseRow()
     {
+        Debug.Log("increasing row");
         for (int x = gridArray.GetLength(0)-1; x >= 0; x--)
         {
             for (int y = gridArray.GetLength(1)-1; y >= 0; y--)
@@ -212,6 +231,46 @@ public class Grid : MonoBehaviour
             }
         }
         BreakBlocks();
+    }
+
+    public void MoveBlocks(float[] coordinates)
+    {
+        int x = (int)Math.Round(coordinates[0]-1);
+        int y = (int)Math.Round(coordinates[1] - .9);
+
+
+        Debug.Log($"x: {coordinates[0]}, y: {coordinates[1]} mathed to be x: {x}, y: {y}");
+        try
+        {
+            gridArray[x, y].transform.position += new Vector3(1f, 0, 0);
+        }
+        catch (Exception e)
+        {
+        }
+        try
+        {
+            gridArray[x + 1, y].transform.position += new Vector3(-1f, 0, 0);
+        }
+        catch (Exception e)
+        {
+        }
+        GameObject tempObject = gridArray[x+1, y];
+        gridArray[x+1, y] = gridArray[x, y];
+        gridArray[x, y] = tempObject;
+        FallBlocks();
+        /*
+        if (resultx)
+        {
+            if (coordinates[1] >= 1.5 && coordinates[0] < 2.5)
+            {
+                gridArray[0, 1].transform.position += new Vector3(1f, 0, 0);
+                gridArray[1, 1].transform.position += new Vector3(-1f, 0, 0);
+                GameObject tempObject = gridArray[1, 1];
+                gridArray[1, 1] = gridArray[0, 1];
+                gridArray[0, 1] = tempObject;
+            }
+        }
+        */
     }
 
 }

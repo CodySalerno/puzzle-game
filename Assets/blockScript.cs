@@ -13,7 +13,13 @@ public class blockScript : MonoBehaviour
     // Start is called before the first frame update
     private int update_counter = 0;
     public GameObject grid;
+    public KeyCode one;
+
     void Start()
+    {
+
+    }
+    void Awake()
     {
 
         spriteRenderer.sprite = spriteList[UnityEngine.Random.Range(0, spriteList.Count)];
@@ -21,7 +27,7 @@ public class blockScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        update_counter++;
+        update_counter++; 
         if (update_counter % 100 == 0) 
         {
             double tolerance = 1e-5; // You can adjust the tolerance as needed
@@ -37,7 +43,6 @@ public class blockScript : MonoBehaviour
         }
     }
 
-    
     public void Fall(GameObject[,] gridArray)
     {
        
